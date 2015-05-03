@@ -183,7 +183,7 @@ int main()
 		}
 
 		cout << "Melhor rota determinada!" << endl;
-		cout << "A rota que percorre as cidade em menor " << variavel[0] << " começando em " << countries[origem_index]
+		cout << "A rota que percorre as cidade em menor " << variavel[0] << " comeÃ§ando em " << countries[origem_index]
 			<< " e terminando em " << countries[destino_index] << " e a seguinte: " << endl;
 
 		for (int i = 0; i < 14; i++)
@@ -196,12 +196,6 @@ int main()
 		cout << endl;
 	}
 	
-
-	//--------------------------------------------------
-	//		Algoritmo para deteccao da melhor rota	
-	//--------------------------------------------------
-
-
 	return 0;
 
 }
@@ -319,7 +313,7 @@ void procura_next3min(vector<int> rotas, vector<int> temp_rota, float soma, int 
 		int cidade[3];
 		float dist[3];
 
-		//procura 1º minimo
+		//procura 1Âº minimo
 		unpair(cidade[0], dist[0]) = procura_min(rotas, indice, matriz);
 		cidade_visitada = find(rotas.begin(), rotas.end(), cidade[0]);
 		rotas.erase(cidade_visitada);
@@ -331,7 +325,7 @@ void procura_next3min(vector<int> rotas, vector<int> temp_rota, float soma, int 
 		temp_rota.erase(temp_cidade_visitada); 
 
 
-		//procuro 2º minimo
+		//procuro 2Âº minimo
 		unpair(cidade[1], dist[1]) = procura_min(rotas, indice, matriz);
 		cidade_visitada = find(rotas.begin(), rotas.end(), cidade[1]);
 		rotas.erase(cidade_visitada);
