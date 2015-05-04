@@ -45,6 +45,8 @@ t_unpair<T1, T2> unpair(T1& a1, T2& a2)
 float distancia[15][15];
 float tempo[15][15];
 float price[15][15];
+int origem_index;
+int destino_index;
 
 
 int temp;
@@ -110,8 +112,6 @@ int main()
 		cout << "A preparar os dados..." << endl;
 
 		//determinacao dos indices de entrada e saida
-		int origem_index;
-		int destino_index;
 
 		for (int index = 0; index < 15; index++)
 		{
@@ -157,28 +157,28 @@ int main()
 			variavel[1] = "km";
 			//determinar melhor trajecto
 			temp_rotas.push_back(trajectos[0]);
-			procura_next3min(rotas, temp_rotas, 0, 0, distancia);
+			procura_next3min(rotas, temp_rotas, 0, trajectos[0], distancia);
 			//adicionar o ultimo percurso ate ao destino
 			rota_final[14] = trajectos[14];
-			soma_final += distancia[rota_final[13]][rota_final[14]];
+			//soma_final += distancia[rota_final[13]][rota_final[14]];
 			break;
 		case 2:
 			variavel[0] = "tempo";
 			variavel[1] = "horas";
 			temp_rotas.push_back(trajectos[0]);
-			procura_next3min(rotas, temp_rotas, 0, 0, tempo);
+			procura_next3min(rotas, temp_rotas, 0, trajectos[0], tempo);
 			//adicionar o ultimo percurso ate ao destino
 			rota_final[14] = trajectos[14];
-			soma_final += tempo[rota_final[13]][rota_final[14]];
+			//soma_final += tempo[rota_final[13]][rota_final[14]];
 			break;
 		case 3:
 			variavel[0] = "preco";
 			variavel[1] = "euros";
 			temp_rotas.push_back(trajectos[0]);
-			procura_next3min(rotas, temp_rotas, 0, 0, price);
+			procura_next3min(rotas, temp_rotas, 0, trajectos[0], price);
 			//adicionar o ultimo percurso ate ao destino
 			rota_final[14] = trajectos[14];
-			soma_final += price[rota_final[13]][rota_final[14]];
+			//soma_final += price[rota_final[13]][rota_final[14]];
 			break;
 		}
 
@@ -196,6 +196,12 @@ int main()
 		cout << endl;
 	}
 	
+
+	//--------------------------------------------------
+	//		Algoritmo para deteccao da melhor rota	
+	//--------------------------------------------------
+
+
 	return 0;
 
 }
@@ -270,11 +276,18 @@ void procura_next3min(vector<int> rotas, vector<int> temp_rota, float soma, int 
 	//caso final, em que a escolha se prende com os 3 ultimos destinos possiveis
 	if (rotas.size() == 1)
 	{
-		if (soma_final > (soma + matriz[indice][rotas[0]]))
+		
+		if (soma_final > (soma + matriz[indice][rotas[0]] + matriz[rotas[0]][destino_index]))
 		{
-			soma_final = (soma + matriz[indice][rotas[0]]);
+			soma_final = (soma + matriz[indice][rotas[0]] + matriz[rotas[0]][destino_index]);
 			for (int i = 0; i < temp_rota.size(); i++)
-				rota_final[i] = (temp_rota[i]);
+					rota_final[i] = (temp_rota[i]);
+			/*{
+				cout << temp_rota[i] << "->";
+			}
+			cout << rotas[0] << endl;
+			cout << soma_final;
+*/
 			rota_final[13] = rotas[0];
 		}
 		
@@ -376,14 +389,14 @@ void procura_next3min(vector<int> rotas, vector<int> temp_rota, float soma, int 
 		cidade_visitada = find(rotas.begin(), rotas.end(), cidade[1]);
 		rotas.erase(cidade_visitada);
 		
-		//procura 3o minimo
-		unpair(cidade[2], dist[2]) = procura_min(rotas, indice, matriz);
-
 		//preparar rotas temporarias e rota percorrida para rota 2
 		temp_cidade_visitada = find(temp_rota.begin(), temp_rota.end(), cidade[0]);
 		temp_rota.erase(temp_cidade_visitada);
 		rotas.push_back(cidade[0]);
 		temp_rota.push_back(cidade[1]);
+
+		//procura 3o minimo
+		unpair(cidade[2], dist[2]) = procura_min(rotas, indice, matriz);
 
 		//procura proximos 3 minimos para rota 2
 		procura_next3min(rotas, temp_rota, (dist[1] + soma), cidade[1], matriz);
